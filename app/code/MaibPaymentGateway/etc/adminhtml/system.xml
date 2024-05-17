@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="maib_gateway" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Maib Payment Gateway Module</label>
+                
+                <group id="general_settings" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" expanded="1">
+                    <label>General Settings</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Maib</label>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                    </field>
+                     <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="9" showInWebsite="1" showInStore="0">
+                        <label>Payment From Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment From Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    </field>
+                </group>
+
+                <group id="configuration_maibmerchants" translate="label comment" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" expanded="1">
+                    <label>Configuration maibmerchants.md</label>
+                    <field id="project_id" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Project ID</label>
+                        <comment>Project ID from maibmerchants.md</comment>
+                    </field>
+                    <field id="project_secret" translate="label comment" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Project Secret</label>
+                        <comment>Project Secret from maibmerchants.md. It is available after project activation.</comment>
+                    </field>
+                    <field id="project_signature" translate="label comment" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Project Signature</label>
+                        <comment>Signature Key for validating notifications на Callback URL. It is available after project activation.</comment>
+                    </field>
+                    <field id="ok_url" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>OK URL</label>
+                        <comment>Add this link to the Ok URL field in the maibmerchants Project settings.</comment>
+                        <frontend_model>Magento\MaibPaymentGateway\Block\Adminhtml\System\Config\Form\Field\CustomField</frontend_model>
+                    </field>
+                    <field id="fail_url" translate="label comment" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Fail URL</label>
+                        <comment>Add this link to the Fail URL field in the maibmerchants Project settings.</comment>
+                        <frontend_model>Magento\MaibPaymentGateway\Block\Adminhtml\System\Config\Form\Field\CustomField</frontend_model>
+                    </field>
+                    <field id="callback_url" translate="label comment" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Callback URL</label>
+                        <comment>Add this link to the Callback URL field in the maibmerchants Project settings.</comment>
+                        <frontend_model>Magento\MaibPaymentGateway\Block\Adminhtml\System\Config\Form\Field\CustomField</frontend_model>
+                    </field>
+                </group>
+
+                <group id="configuration_order_status" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0" expanded="1">
+                    <label>Configuration Order Status</label>
+                    <field id="pending_status_id" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Pending Status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                    </field>
+                    <field id="completed_status_id" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Completed Status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                    </field>
+                    <field id="failed_status_id" translate="label" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Failed Status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                    </field>
+                    <field id="refunded_status_id" translate="label comment" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Refunded Status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                        <comment>For payment refund, update the order status to the selected status. The funds will be returned to the customer card.</comment>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>
