@@ -19,3 +19,6 @@
 "Failed Status","Platã eșuatã"
 "Refunded Status","Platã returnatã"
 "For payment refund, update the order status to the selected status. The funds will be returned to the customer card.","Pentru returnarea plății, actualizați starea comenzii la starea selectată. Suma va fi returnatã pe cardul clientului."
+"Error callback URL","Acest Callback URL funcționează și nu poate fi accesat direct!"
+"Payment failed! Please try again.","Plata a eșuat! Vă rugăm să încercați din nou."
+"Error no payment","Plata a eșuat! Vă rugăm să încercați din nou."

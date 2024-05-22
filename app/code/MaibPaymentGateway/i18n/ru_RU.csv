@@ -19,3 +19,6 @@
 "Failed Status","Неуспешная оплата"
 "Refunded Status","Возврат платежа"
 "For payment refund, update the order status to the selected status. The funds will be returned to the customer card.","Для возврата платежа обновите статус заказа на выбранного статуса. Средства будут возвращены на карту клиента."
+"Error callback URL","Этот Callback URL работает и не должен вызываться напрямую!"
+"Payment failed! Please try again.","Оплата не удалась! Пожалуйста, попробуйте еще раз."
+"Error no payment","Оплата не удалась! Пожалуйста, попробуйте еще раз."

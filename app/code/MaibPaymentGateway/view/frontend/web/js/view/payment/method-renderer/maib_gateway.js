@@ -1,7 +1,3 @@
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
 /*browser:true*/
 /*global define*/
 define(
@@ -17,15 +13,6 @@ define(
                 transactionResult: ''
             },
 
-            initObservable: function () {
-
-                this._super()
-                    .observe([
-                        'transactionResult'
-                    ]);
-                return this;
-            },
-
             getCode: function() {
                 return 'maib_gateway';
             },
@@ -33,20 +20,8 @@ define(
             getData: function() {
                 return {
                     'method': this.item.method,
-                    'additional_data': {
-                        'transaction_result': this.transactionResult()
-                    }
                 };
             },
-
-            getTransactionResults: function() {
-                return _.map(window.checkoutConfig.payment.maib_gateway.transactionResults, function(value, key) {
-                    return {
-                        'value': key,
-                        'transaction_result': value
-                    }
-                });
-            }
         });
     }
 );
