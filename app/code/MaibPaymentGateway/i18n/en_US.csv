@@ -20,5 +20,5 @@
 "Refunded Status","Refunded Status"
 "For payment refund, update the order status to the selected status. The funds will be returned to the customer card.","For payment refund, update the order status to the selected status. The funds will be returned to the customer card."
 "Error callback URL","This Callback URL works and should not be called directly!"
-"Payment failed! Please try again.","Error no payment"
+"Payment failed! Please try again.","Payment failed! Please try again."
 "Error no payment","Error no payment."

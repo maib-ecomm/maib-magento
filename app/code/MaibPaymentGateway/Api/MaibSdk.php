@@ -8,7 +8,7 @@
  * @developer Lupu Constantin
  * @license MIT
  */
-namespace MaibEcomm\MaibSdk;
+namespace Magento\MaibPaymentGateway\Api;
 
 use RuntimeException;
 
