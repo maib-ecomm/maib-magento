@@ -20,7 +20,7 @@ After signing the contract, you will receive access to the maibmerchants platfor
 **Payment refund**:
 To refund the payment it is necessary to:
 1. Find necessary order in your orders list (_Sales_ -> _Orders_) and to open it.
-2. Make user your order has an invoice (if not, you will need to create it using _Invoice_ button (see _refund-1.png_)).
+2. Make sure your order has an invoice (if not, you will need to create it using _Invoice_ button (see _refund-1.png_)).
 3. After you have submitted the invoice, you will need to access _Invoices_ (see _refund-2.png_).
 4. Click to invoice which you see on the page.
 5. Click to _Credit Memo_ (see _refund-3.png_).
