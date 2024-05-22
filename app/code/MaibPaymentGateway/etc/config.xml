@@ -11,6 +11,7 @@
                 <can_void>1</can_void>
                 <can_use_checkout>1</can_use_checkout>
                 <is_gateway>1</is_gateway>
+                <can_refund>1</can_refund>
                 <general_settings>
                     <active>0</active>
                     <title>Maib</title>

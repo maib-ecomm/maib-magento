@@ -17,20 +17,28 @@ After signing the contract, you will receive access to the maibmerchants platfor
 
 **Three currencies**: MDL / USD / EUR (depending on your Project settings).
 
-**Payment refund**: To refund the payment it is necessary to update the order status (see _refund.png_) to the selected status for _Refunded payment_ in **Maib Payment Gateway Module** extension settings (see _settings-general.png_ , _settings-maibmerchants.png_ and _settings-order-status.png_). The payment amount will be returned to the customer's card.
+**Payment refund**:
+To refund the payment it is necessary to:
+1. Find necessary order in your orders list (_Sales_ -> _Orders_) and to open it.
+2. Make user your order has an invoice (if not, you will need to create it using _Invoice_ button (see _refund-1.png_)).
+3. After you have submitted the invoice, you will need to access _Invoices_ (see _refund-2.png_).
+4. Click to invoice which you see on the page.
+5. Click to _Credit Memo_ (see _refund-3.png_).
+6. Click to _Refund_ button (see _refund-4.png_).
+7. The payment amount will be returned to the customer's card.
 
 ## Requirements
 - Registration on the maibmerchants.md
 - Magento 2 platform
 - _curl_ and _json_ extensions enabled
 
-## Installation
+## Installation (see _settings-general.png_)
 1. Download the extension file from Github or Magento repository.
 2. In the Magento 2 Admin Panel/Admin UI, go to _Stores_ -> _Configuration_ -> _Sales_ -> _Payment Methods_.
 3. Find the **Maib Payment Gateway Module** add-on in the list (_Other Payment Methods_).
 4. Choose _Yes_ from the _Enabled_ field button and Magento 2 will start the installation process, so that the addon will be enabled.
 
-## Settings
+## Settings (see _settings-maibmerchants.png_ and _settings-order-status.png_)
 1. Project ID - Project ID from maibmerchants.md
 2. Project Secret - Project Secret from maibmerchants.md. It is available after project activation.
 3. Signature Key - Signature Key for validating notifications on Callback URL. It is available after project activation.

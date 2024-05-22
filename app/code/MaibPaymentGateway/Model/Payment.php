@@ -21,110 +21,101 @@ class Payment extends AbstractMethod
     protected $_canCapture = true;
     protected $_canVoid = true;
     protected $_canUseCheckout = true;
+    protected $_canRefund = true;
 
     protected $cache;
 
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        $objectManager = ObjectManager::getInstance();
-        $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $logger = $objectManager->get(LoggerInterface::class);
-        $redirectFactory = $objectManager->get(\Magento\Framework\Controller\Result\RedirectFactory::class);
+        $payment->setTransactionId('333444');
+        $payment->setIsTransactionClosed(false);
+        return $this;
+    }
 
-        $store = $storeManager->getStore();
-        $baseUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    {
+        $transactionId = $payment->getParentTransactionId() ?: $payment->getTransactionId();
 
-        $okUrl = $baseUrl . 'maib/payment/success';
-        $failUrl = $baseUrl . 'maib/payment/fail';
-        $callbackUrl = $baseUrl . 'maib/payment/callback';
-
-        $orderInfo = $payment->getOrder();
-        $orderId = $orderInfo->getIncrementId();
-
-        $description = [];
-        $productItems = [];
-
-        foreach ($orderInfo->getAllItems() as $item) {
-            $description[] = $item->getQtyOrdered() . " x " . $item->getName();
-
-            $productItems[] = [
-                "id" => $item->getProductId(),
-                "name" => $item->getName(),
-                "price" => $item->getPrice(),
-                "quantity" => (float) number_format(
-                    $item->getQtyOrdered(),
-                    1,
-                    ".",
-                    ""
-                ),
-            ];
+        if (!$transactionId) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('No transaction ID found for capture.'));
         }
 
-        $billingAddress = $orderInfo->getBillingAddress();
+        $payment->setTransactionId($transactionId);
+        $payment->setIsTransactionClosed(true);
 
-        $storeLocale = $scopeConfig->getValue(
-            'general/locale/code',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store->getId()
-        );
+        $order = $payment->getOrder();
+        $invoice = $order->getInvoiceCollection()->getLastItem();
+        if ($invoice) {
+            $invoice->setTransactionId($transactionId);
+            $invoice->save();
+        }
 
-        $params = [
-            "amount" => $orderInfo->getGrandTotal(),
-            "currency" => $orderInfo->getOrderCurrencyCode(),
-            "clientIp" => $orderInfo->getRemoteIp(),
-            "language" => $storeLocale,
-            "description" => substr(implode(", ", $description), 0, 124),
-            "orderId" => $orderId,
-            "clientName" => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
-            "email" => $billingAddress->getEmail(),
-            "phone" => substr($billingAddress->getTelephone(), 0, 40),
-            "delivery" => $orderInfo->getShippingAmount(),
-            "okUrl" => $okUrl,
-            "failUrl" => $failUrl,
-            "callbackUrl" => $callbackUrl,
-            "items" => $productItems,
-        ];
+        return $this;
+    }
 
+    public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    {
+        $objectManager = ObjectManager::getInstance();
+        $logger = $objectManager->get(LoggerInterface::class);
+        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $orderInfo = $payment->getOrder();
+        $orderId = $orderInfo->getIncrementId();
+        $paymentMethodCode = $payment->getMethod();
+        $transactionId = $payment->getParentTransactionId() ?: $payment->getTransactionId();
+
+        if (!$orderId || !$orderInfo || $paymentMethodCode != 'maib_gateway') {
+            return;
+        }
+        
         $logger->info(
-            'Order params: ' . json_encode($params, JSON_PRETTY_PRINT)
+            'Initiate Refund Payment Request to maib API, pay_id: ' . $transactionId . ', order_id: ' . $orderId
         );
+    
+        $params = ['payId' => strval($transactionId)];
 
         try {
-            // Initiate Direct Payment Request to maib API
-            $response = MaibApiRequest::create()->pay(
+            // Initiate Refund Payment Request to maib API
+            $response = MaibApiRequest::create()->refund(
                 $params,
                 $this->getAccessToken()
             );
 
-            if (!isset($response->payId)) {
+            $logger->info(
+                'Response from refund endpoint: ' . json_encode($response, JSON_PRETTY_PRINT) . ', order_id: ' . $orderId
+            );
+    
+            if ($response && $response->status === "OK") {
                 $logger->info(
-                    'No valid response from maib API, order_id: ' . $orderId
+                    'Full refunded payment ' . $transactionId . ' for order ' . $orderId
                 );
 
-                $resultRedirect = $redirectFactory->create();
-                $resultRedirect->setPath('checkout/checkout');
-                return $resultRedirect;
-            } else {
-                $logger->info(
-                    'Pay endpoint response: ' . json_encode($response, JSON_PRETTY_PRINT) . ', order_id: ' . $orderId
-                );
-
-                $orderStatusId = $scopeConfig->getValue('payment/maib_gateway/configuration_order_status/pending_status_id');
+                $orderStatusId = $scopeConfig->getValue('payment/maib_gateway/configuration_order_status/refunded_status_id');
 
                 $orderInfo->setStatus($orderStatusId);
+            } else if ($response && $response->status === "REVERSED") {
+                $logger->info(
+                    'Already refunded payment ' . $transactionId . ' for order ' . $orderId
+                );
 
-                $resultRedirect = $redirectFactory->create();
-                $resultRedirect->setPath($response->payUrl);
-                return $resultRedirect;
+                throw new \Exception(
+                    'Already refunded payment ' . $transactionId . ' for order ' . $orderId
+                );
+            } else {
+                $logger->info(
+                    'Failed refund payment ' . $transactionId . ' for order ' . $orderId
+                );
+
+                throw new \Exception(
+                    'Failed refund payment ' . $transactionId . ' for order ' . $orderId
+                );
             }
-        } catch (Exception $ex) {
+        } catch (Exception $e) {
             $logger->info(
-                'Error no payment: ' . $ex->getMessage()
+                'Failed refund payment ' . $transactionId . ' for order ' . $orderId
             );
 
             throw new \Exception(
-                __('Payment failed! Please try again.')
+                'Failed refund payment ' . $transactionId . ' for order ' . $orderId
             );
         }
     }
