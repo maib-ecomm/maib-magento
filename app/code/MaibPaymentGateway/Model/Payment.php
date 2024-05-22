@@ -30,7 +30,6 @@ class Payment extends AbstractMethod
         $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $logger = $objectManager->get(LoggerInterface::class);
-        $messageManager = $objectManager->get(\Magento\Framework\Message\ManagerInterface::class);
         $redirectFactory = $objectManager->get(\Magento\Framework\Controller\Result\RedirectFactory::class);
 
         $store = $storeManager->getStore();
