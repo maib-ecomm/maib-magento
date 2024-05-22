@@ -27,9 +27,110 @@ class Payment extends AbstractMethod
 
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        $payment->setTransactionId('333444');
-        $payment->setIsTransactionClosed(false);
-        return $this;
+        $objectManager = ObjectManager::getInstance();
+        $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $logger = $objectManager->get(LoggerInterface::class);
+        $redirectFactory = $objectManager->get(\Magento\Framework\Controller\Result\RedirectFactory::class);
+
+        $store = $storeManager->getStore();
+        $baseUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+
+        $okUrl = $baseUrl . 'maib/payment/success';
+        $failUrl = $baseUrl . 'maib/payment/fail';
+        $callbackUrl = $baseUrl . 'maib/payment/callback';
+
+        $orderInfo = $payment->getOrder();
+        $orderId = $orderInfo->getIncrementId();
+
+        $description = [];
+        $productItems = [];
+
+        foreach ($orderInfo->getAllItems() as $item) {
+            $description[] = $item->getQtyOrdered() . " x " . $item->getName();
+
+            $productItems[] = [
+                "id" => $item->getProductId(),
+                "name" => $item->getName(),
+                "price" => $item->getPrice(),
+                "quantity" => (float) number_format(
+                    $item->getQtyOrdered(),
+                    1,
+                    ".",
+                    ""
+                ),
+            ];
+        }
+
+        $billingAddress = $orderInfo->getBillingAddress();
+
+        $storeLocale = $scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store->getId()
+        );
+
+        $params = [
+            "amount" => $orderInfo->getGrandTotal(),
+            "currency" => $orderInfo->getOrderCurrencyCode(),
+            "clientIp" => $orderInfo->getRemoteIp(),
+            "language" => $storeLocale,
+            "description" => substr(implode(", ", $description), 0, 124),
+            "orderId" => $orderId,
+            "clientName" => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
+            "email" => $billingAddress->getEmail(),
+            "phone" => substr($billingAddress->getTelephone(), 0, 40),
+            "delivery" => $orderInfo->getShippingAmount(),
+            "okUrl" => $okUrl,
+            "failUrl" => $failUrl,
+            "callbackUrl" => $callbackUrl,
+            "items" => $productItems,
+        ];
+
+        $logger->info(
+            'Order params: ' . json_encode($params, JSON_PRETTY_PRINT)
+        );
+
+        try {
+            // Initiate Direct Payment Request to maib API
+            $response = MaibApiRequest::create()->pay(
+                $params,
+                $this->getAccessToken()
+            );
+
+            if (!isset($response->payId)) {
+                $logger->info(
+                    'No valid response from maib API, order_id: ' . $orderId
+                );
+
+                $resultRedirect = $redirectFactory->create();
+                $resultRedirect->setPath('checkout/checkout');
+                return $resultRedirect;
+            } else {
+                $logger->info(
+                    'Pay endpoint response: ' . json_encode($response, JSON_PRETTY_PRINT) . ', order_id: ' . $orderId
+                );
+
+                $orderStatusId = $scopeConfig->getValue('payment/maib_gateway/configuration_order_status/pending_status_id');
+
+                $orderInfo->setStatus($orderStatusId);
+
+                $payment->setTransactionId($response->payId);
+                $payment->setIsTransactionClosed(false);
+
+                $resultRedirect = $redirectFactory->create();
+                $resultRedirect->setPath($response->payUrl);
+                return $resultRedirect;
+            }
+        } catch (Exception $ex) {
+            $logger->info(
+                'Error no payment: ' . $ex->getMessage()
+            );
+
+            throw new \Exception(
+                __('Payment failed! Please try again.')
+            );
+        }
     }
 
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
