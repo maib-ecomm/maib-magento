@@ -46,7 +46,7 @@ To refund the payment it is necessary to:
 5. Order status settings: Pending payment - Order status when payment is in pending.
 6. Order status settings: Completed payment - Order status when payment is successfully completed.
 7. Order status settings: Failed payment - Order status when payment failed.
-8. Order status settings: Refunded payment - Order status when payment is refunded. For payment refund, update the order status to the this selected status (see _refund.png_).
+8. Order status settings: Refunded payment - Order status when payment is refunded. For payment refund, update the order status to the this selected status.
 
 ## Troubleshooting
 If you require further assistance, please don't hesitate to contact the **Maib Payment Gateway Module** ecommerce support team by sending an email to ecom@maib.md. 

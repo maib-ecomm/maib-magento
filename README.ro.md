@@ -46,7 +46,7 @@ Pentru a rambursa plata este necesar:
 5. Plată în așteptare - Starea comenzii când plata este în așteptare.
 6. Plată cu succes - Starea comenzii când plata este finalizată cu succes.
 7. Plată eșuată - Starea comenzii când plata a eșuat.
-8. Platã returnatã - Starea comenzii când plata este returnată. Pentru returnarea plății, actualizați starea comenzii la starea selectată aici (vedeți _refund.png_).
+8. Platã returnatã - Starea comenzii când plata este returnată. Pentru returnarea plății, actualizați starea comenzii la starea selectată aici.
 
 ## Depanare
 Dacă aveți nevoie de asistență suplimentară, vă rugăm să nu ezitați să contactați echipa de asistență ecommerce **Modulul Maib Payment Gateway**, expediind un e-mail la ecom@maib.md.
