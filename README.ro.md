@@ -32,11 +32,34 @@ Pentru a rambursa plata este necesar:
 - Magento 2 platforma
 - extensiile _curl_ and _json_ activate
 
-## Installation (vedeți _settings-general.png_)
+## Instalarea manuală (vedeți _settings-general.png_)
 1. Descărcați fișierul de extensie din Github sau Magento.
 2. În panoul de administrare Magento 2, accesați _Magazine_ -> _Configurare_ -> _Vânzări_ -> _Metode de plată_.
 3. Găsiți modulul **Maib Payment Gateway Module** în listă (_Alte metode de plată_).
 4. Alegeți _Da_ din butonul câmpului _Activ_ și Magento 2 va începe procesul de instalare, astfel încât modulul să fie activat.
+
+## Instalarea prin consolă
+1. Rulați următoarea comandă pentru a activa modulul:
+```console
+php bin/magento module:enable Magento_MaibPaymentGateway
+```
+2. Veți vedea un mesaj de succes (vedeți _installation-console.png_).
+3. Rulați următoarea comandă pentru a face un upgrade de instalare pentru Magento:
+```console
+php bin/magento setup:upgrade
+```
+4. Rulați următoarea comandă:
+```console
+php bin/magento setup:static-content:deploy -f
+```
+5. Rulați următoarea comandă:
+```console
+php bin/magento cache:clean
+```
+6. Rulați următoarea comandă:
+```console
+php bin/magento cache:flush
+```
 
 ## Setări (vedeți _settings-maibmerchants.png_ și _settings-order-status.png_)
 1. Project ID - Project ID din maibmerchants.md

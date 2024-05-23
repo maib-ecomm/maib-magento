@@ -32,11 +32,34 @@
 - Magento 2 платформа
 - Расширения _curl_ и _json_ включены
 
-## Установка (см. _settings-general.png_)
+## Установка вручную (см. _settings-general.png_)
 1. Загрузите файл расширения из репозитория Github или Magento.
 2. В панели администратора/интерфейсе администратора Magento 2 перейдите в раздел _Магазины_ -> _Конфигурация_ -> _Продажи_ -> _Способы оплаты_.
 3. Найдите модуль **Модуль платежного шлюза Maib** в списке (_Другие способы оплаты_).
 4. Выберите _Да_ в поле _Активирован_, и Magento 2 начнет процесс установки, чтобы модуль начал работать.
+
+## Установка через консоль
+1. Запустите следующую команду для установки модуля:
+```console
+php bin/magento module:enable Magento_MaibPaymentGateway
+```
+2. Вы увидите сообщение об успешной установке (см. _installation-console.png_).
+3. Запустите следующую команду для обновления системы Magento:
+```console
+php bin/magento setup:upgrade
+```
+4. Запустите следующую команду:
+```console
+php bin/magento setup:static-content:deploy -f
+```
+5. Запустите следующую команду:
+```console
+php bin/magento cache:clean
+```
+6. Запустите следующую команду:
+```console
+php bin/magento cache:flush
+```
 
 ## Настройки (см. _settings-maibmerchants.png_ и _settings-order-status.png_)
 1. Project ID - Project ID из Проекта (Тестовый или Производственный) в maibmerchants.

@@ -32,11 +32,34 @@ To refund the payment it is necessary to:
 - Magento 2 platform
 - _curl_ and _json_ extensions enabled
 
-## Installation (see _settings-general.png_)
+## Manual installation (see _settings-general.png_)
 1. Download the extension file from Github or Magento repository.
 2. In the Magento 2 Admin Panel/Admin UI, go to _Stores_ -> _Configuration_ -> _Sales_ -> _Payment Methods_.
 3. Find the **Maib Payment Gateway Module** add-on in the list (_Other Payment Methods_).
 4. Choose _Yes_ from the _Enabled_ field button and Magento 2 will start the installation process, so that the addon will be enabled.
+
+## Installation via console
+1. Run the following command to enable the addon:
+```console
+php bin/magento module:enable Magento_MaibPaymentGateway
+```
+2. You will see success message (see _installation-console.png_).
+3. Run the following command in order to make an upgrade for the Magento setup:
+```console
+php bin/magento setup:upgrade
+```
+4. Run the following command:
+```console
+php bin/magento setup:static-content:deploy -f
+```
+5. Run the following command:
+```console
+php bin/magento cache:clean
+```
+6. Run the following command:
+```console
+php bin/magento cache:flush
+```
 
 ## Settings (see _settings-maibmerchants.png_ and _settings-order-status.png_)
 1. Project ID - Project ID from maibmerchants.md
