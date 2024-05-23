@@ -20,11 +20,11 @@ După semnarea contractului veți primi acces la platforma maibmerchants și ve�
 **Returnare plată**:
 Pentru a rambursa plata este necesar:
 1. Găsiți comanda necesară în lista de comenzi (_Vânzări_ -> _Comenzi_) și deschideți-o.
-2. Asigurați-vă că comanda dvs. are o factură (dacă nu, va trebui să o creați folosind butonul _Factură_ (consultați _refund-1.png_)).
-3. După ce ați trimis factura, va trebui să accesați _Facturi_ (vezi _refund-2.png_).
+2. Asigurați-vă că comanda dvs. are o factură (dacă nu, va trebui să o creați folosind butonul _Factură_ (vedeți _refund-1.png_)).
+3. După ce ați trimis factura, va trebui să accesați _Facturi_ (vedeți _refund-2.png_).
 4. Faceți clic pentru a factura pe care îl vedeți pe pagină.
-5. Faceți clic pentru _Notă de credit_ (consultați _refund-3.png_).
-6. Faceți clic pe butonul _Returnează_ (consultați _refund-4.png_).
+5. Faceți clic pentru _Notă de credit_ (vedeți _refund-3.png_).
+6. Faceți clic pe butonul _Returnează_ (vedeți _refund-4.png_).
 7. Suma plății va fi returnată pe cardul clientului.
 
 ## Cerințe 
