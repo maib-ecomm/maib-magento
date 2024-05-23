@@ -22,3 +22,7 @@
 "Error callback URL","Acest Callback URL funcționează și nu poate fi accesat direct!"
 "Payment failed! Please try again.","Plata a eșuat! Vă rugăm să încercați din nou."
 "Error no payment","Plata a eșuat! Vă rugăm să încercați din nou."
+"No valid response from maib API, order_id: %1","Niciun răspuns valid de la maib API, ID comanda: %1"
+"No transaction ID found for capture.","Nu a fost găsit niciun ID de tranzacție pentru capturare."
+"Already refunded payment %1 for order %2","Plata %1 a fost deja rambursată pentru comanda %2"
+"Failed refund payment %1 for order %2","Plata de rambursare eșuată %1 pentru comanda %2"

@@ -103,9 +103,9 @@ class Payment extends AbstractMethod
                     'No valid response from maib API, order_id: ' . $orderId
                 );
 
-                $resultRedirect = $redirectFactory->create();
-                $resultRedirect->setPath('checkout/checkout');
-                return $resultRedirect;
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('No valid response from maib API, order_id: %1', $orderId)
+                );
             } else {
                 $logger->info(
                     'Pay endpoint response: ' . json_encode($response, JSON_PRETTY_PRINT) . ', order_id: ' . $orderId
@@ -127,7 +127,7 @@ class Payment extends AbstractMethod
                 'Error no payment: ' . $ex->getMessage()
             );
 
-            throw new \Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Payment failed! Please try again.')
             );
         }
@@ -138,7 +138,9 @@ class Payment extends AbstractMethod
         $transactionId = $payment->getParentTransactionId() ?: $payment->getTransactionId();
 
         if (!$transactionId) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('No transaction ID found for capture.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('No transaction ID found for capture.')
+            );
         }
 
         $payment->setTransactionId($transactionId);
@@ -198,16 +200,16 @@ class Payment extends AbstractMethod
                     'Already refunded payment ' . $transactionId . ' for order ' . $orderId
                 );
 
-                throw new \Exception(
-                    'Already refunded payment ' . $transactionId . ' for order ' . $orderId
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Already refunded payment %1 for order %2', $transactionId, $orderId)
                 );
             } else {
                 $logger->info(
                     'Failed refund payment ' . $transactionId . ' for order ' . $orderId
                 );
 
-                throw new \Exception(
-                    'Failed refund payment ' . $transactionId . ' for order ' . $orderId
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Failed refund payment %1 for order %2', $transactionId, $orderId)
                 );
             }
         } catch (Exception $e) {
@@ -215,8 +217,8 @@ class Payment extends AbstractMethod
                 'Failed refund payment ' . $transactionId . ' for order ' . $orderId
             );
 
-            throw new \Exception(
-                'Failed refund payment ' . $transactionId . ' for order ' . $orderId
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Failed refund payment %1 for order %2', $transactionId, $orderId)
             );
         }
     }

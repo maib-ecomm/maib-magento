@@ -22,3 +22,7 @@
 "Error callback URL","Этот Callback URL работает и не должен вызываться напрямую!"
 "Payment failed! Please try again.","Оплата не удалась! Пожалуйста, попробуйте еще раз."
 "Error no payment","Оплата не удалась! Пожалуйста, попробуйте еще раз."
+"No valid response from maib API, order_id: %1","Нет действительного ответа от API maib, ID заказа: %1"
+"No transaction ID found for capture.","Идентификатор транзакции для захвата не найден."
+"Already refunded payment %1 for order %2","Платеж %1 за заказ %2 уже возвращен."
+"Failed refund payment %1 for order %2","Не удалось вернуть платеж %1 для заказа %2."

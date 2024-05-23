@@ -22,3 +22,7 @@
 "Error callback URL","This Callback URL works and should not be called directly!"
 "Payment failed! Please try again.","Payment failed! Please try again."
 "Error no payment","Error no payment."
+"No valid response from maib API, order_id: %1","No valid response from maib API, order ID: %1"
+"No transaction ID found for capture.","No transaction ID found for capture."
+"Already refunded payment %1 for order %2","Already refunded payment %1 for order %2"
+"Failed refund payment %1 for order %2","Failed refund payment %1 for order %2"
